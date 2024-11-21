@@ -1,13 +1,8 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_dispatch: # 手动触发
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,10 +16,10 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        distribution: 'temurin' # Alternative: 'zulu' or 'adopt'
-        java-version: '17'     # Use Java 17 or another version compatible with your project
+        distribution: 'temurin'
+        java-version: '17'
 
-    # Step 3: Cache Gradle dependencies (optional but speeds up builds)
+    # Step 3: Cache Gradle dependencies
     - name: Cache Gradle dependencies
       uses: actions/cache@v3
       with:
@@ -33,6 +28,35 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    # Step 4: Build the project using Gradle
+    # Step 4: Build the project
     - name: Build with Gradle
       run: ./gradlew build
+
+    # Step 5: Upload the build artifact
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Mod JAR
+        path: build/libs/*.jar
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Download the build artifact
+    - name: Download build artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: Mod JAR
+
+    # Step 2: Create GitHub Release
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+        files: build/libs/*.jar
