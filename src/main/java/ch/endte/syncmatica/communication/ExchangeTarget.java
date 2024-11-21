@@ -44,11 +44,11 @@ public class ExchangeTarget {
             context.getDebugService().logSendPacket(id, persistentName);
         }
         if (clientPlayNetworkHandler != null) {
-            CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(id, packetBuf);
+            CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(id, packetBuf.copy());
             clientPlayNetworkHandler.sendPacket(packet);
         }
         if (serverPlayNetworkHandler != null) {
-            CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(id, packetBuf);
+            CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(id, packetBuf.copy());
             serverPlayNetworkHandler.sendPacket(packet);
         }
     }
