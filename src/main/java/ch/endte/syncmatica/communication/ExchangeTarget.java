@@ -41,15 +41,15 @@ public class ExchangeTarget {
     // this class handles the sending of either S2C or C2S packets
     public void sendPacket(final Identifier id, final PacketByteBuf packetBuf, final Context context) {
         if (clientPlayNetworkHandler != null) {
-    PacketByteBuf packetBufCopy = PacketByteBuf.fromByteBuf(packetBuf.copy()); // 假设的方法
-    CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(id, packetBufCopy);
-    clientPlayNetworkHandler.sendPacket(packet);
+        PacketByteBuf packetBufCopy = new PacketByteBuf(packetBuf.copy()); // 假设有一个接受 ByteBuf 的构造器
+        CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(id, packetBufCopy);
+        clientPlayNetworkHandler.sendPacket(packet);
     }
 
     if (serverPlayNetworkHandler != null) {
-    PacketByteBuf packetBufCopy = PacketByteBuf.fromByteBuf(packetBuf.copy()); // 假设的方法
-    CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(id, packetBufCopy);
-    serverPlayNetworkHandler.sendPacket(packet);
+        PacketByteBuf packetBufCopy = new PacketByteBuf(packetBuf.copy()); // 假设有一个接受 ByteBuf 的构造器
+        CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(id, packetBufCopy);
+        serverPlayNetworkHandler.sendPacket(packet);
     }
 }
 
