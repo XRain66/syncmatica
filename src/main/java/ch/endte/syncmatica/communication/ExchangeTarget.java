@@ -40,18 +40,18 @@ public class ExchangeTarget {
     // this application exclusively communicates in CustomPayLoad packets
     // this class handles the sending of either S2C or C2S packets
     public void sendPacket(final Identifier id, final PacketByteBuf packetBuf, final Context context) {
-        if (context != null) {
-            context.getDebugService().logSendPacket(id, persistentName);
-        }
         if (clientPlayNetworkHandler != null) {
-            CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(id, packetBuf.copy());
-            clientPlayNetworkHandler.sendPacket(packet);
-        }
-        if (serverPlayNetworkHandler != null) {
-            CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(id, packetBuf.copy());
-            serverPlayNetworkHandler.sendPacket(packet);
-        }
+    PacketByteBuf packetBufCopy = PacketByteBuf.fromByteBuf(packetBuf.copy()); // 假设的方法
+    CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(id, packetBufCopy);
+    clientPlayNetworkHandler.sendPacket(packet);
     }
+
+    if (serverPlayNetworkHandler != null) {
+    PacketByteBuf packetBufCopy = PacketByteBuf.fromByteBuf(packetBuf.copy()); // 假设的方法
+    CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(id, packetBufCopy);
+    serverPlayNetworkHandler.sendPacket(packet);
+    }
+}
 
     // removed equals code due to issues with Collection.contains
 
