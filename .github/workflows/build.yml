@@ -12,7 +12,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: Set up Java (specify Java version)
+    # Step 2: Set up Java
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
@@ -37,7 +37,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Mod JAR
-        path: build/libs/*.jar
+        path: build/libs/*.jar # 确保路径与生成的 JAR 文件一致
 
   release:
     needs: build
@@ -59,4 +59,4 @@ jobs:
         release_name: Release ${{ github.ref_name }}
         draft: false
         prerelease: false
-        files: build/libs/*.jar
+        files: build/libs/*.jar # 确保路径与下载的文件一致
